@@ -7,7 +7,7 @@
 
 
 
-### 1. Для выполнения задания был написан файл Terraform [main.tf](https://github.com/Stitchzxz/final_work/blob/main/main.tf) для создания следующих ресурсов:
+### 1. Для выполнения задания был написан файл Terraform [main.tf](https://github.com/temagraf/final_work/blob/main/main.tf) для создания следующих ресурсов:
  
 ### 1.1. Виртуальные машины 
   - nginx1 
@@ -21,7 +21,7 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![список вм](https://github.com/Stitchzxz/final_work/blob/main/img/VM_list.png)
+![список вм](https://github.com/temagraf/final_work/blob/main/img/VM_list.png)
 
 </details>
 
@@ -31,7 +31,7 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![балансировщик](https://github.com/Stitchzxz/final_work/blob/main/img/alb.png)
+![балансировщик](https://github.com/temagraf/final_work/blob/main/img/alb.png)
 
 </details>
 
@@ -46,7 +46,7 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![группы безопасности](https://github.com/Stitchzxz/final_work/blob/main/img/security_groups.png)
+![группы безопасности](https://github.com/temagraf/final_work/blob/main/img/security_groups.png)
 
 </details>
 
@@ -58,7 +58,7 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![снимки дисков](https://github.com/Stitchzxz/final_work/blob/main/img/schedule.png)
+![снимки дисков](https://github.com/temagraf/final_work/blob/main/img/schedule.png)
 
 </details>
 
@@ -75,7 +75,7 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![Карта сети](https://github.com/Stitchzxz/final_work/blob/main/img/network1.png)
+![Карта сети](https://github.com/temagraf/final_work/blob/main/img/network1.png)
 
 </details>
 
@@ -85,7 +85,7 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![Карта сети](https://github.com/Stitchzxz/final_work/blob/main/img/network_map.png)
+![Карта сети](https://github.com/temagraf/final_work/blob/main/img/network_map.png)
 
 </details>
 
@@ -96,20 +96,20 @@
 
 *Ansible настроен на Bastion host и вся установка происходит с него.
 
-### 2.1. [inventory.ini](https://github.com/Stitchzxz/final_work/blob/main/ansible/inventory.ini)
+### 2.1. [inventory.ini](https://github.com/temagraf/final_work/blob/main/ansible/inventory.ini)
   - содержит список удаленных хостов для подключения к ним и установки необходимых программ
 
-### 2.2. [ping_pb.yml](https://github.com/Stitchzxz/final_work/blob/main/ansible/ping_pb.yml) (был добавлен для удобства)
+### 2.2. [ping_pb.yml](https://github.com/temagraf/final_work/blob/main/ansible/ping_pb.yml) (был добавлен для удобства)
   - проверяет доступность хостов
 
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![пинг](https://github.com/Stitchzxz/final_work/blob/main/img/ping.png)
+![пинг](https://github.com/temagraf/final_work/blob/main/img/ping.png)
 
 </details>
 
-### 2.3. [nginx_pb.yml](https://github.com/Stitchzxz/final_work/blob/main/ansible/nginx_pb.yml) 
+### 2.3. [nginx_pb.yml](https://github.com/temagraf/final_work/blob/main/ansible/nginx_pb.yml) 
   - устанавливает nginx на две виртуальные машины состоящие в группе web_servers
   - копирует c локального хоста страницу для отображения при обращении на ip адрес балансировщика. 
 *Проверка работоспособности [тут](http://158.160.144.65:80)
@@ -117,13 +117,13 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![установка nginx](https://github.com/Stitchzxz/final_work/blob/main/img/install_nginx.png)
-![веб страница](https://github.com/Stitchzxz/final_work/blob/main/img/web_page.png)
+![установка nginx](https://github.com/temagraf/final_work/blob/main/img/install_nginx.png)
+![веб страница](https://github.com/temagraf/final_work/blob/main/img/web_page.png)
 
 </details>
 
 
-### 2.4. [zabbix_pb.yml](https://github.com/Stitchzxz/final_work/blob/main/ansible/zabbix_pb.yml)
+### 2.4. [zabbix_pb.yml](https://github.com/temagraf/final_work/blob/main/ansible/zabbix_pb.yml)
   - добавляет репозиторий zabbix
   - устанавливает на хост zabbix -  zabbix server, zabbix agent, mysql, nginx и прочие зависимости
   - создает базу данных, пользователя, задает пароль
@@ -131,13 +131,13 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![установка zabbix](https://github.com/Stitchzxz/final_work/blob/main/img/install_zabbix_server.png)
-![установка zabbix](https://github.com/Stitchzxz/final_work/blob/main/img/finish_install_zabbix.png)
+![установка zabbix](https://github.com/temagraf/final_work/blob/main/img/install_zabbix_server.png)
+![установка zabbix](https://github.com/temagraf/final_work/blob/main/img/finish_install_zabbix.png)
 
 </details>
 
 
-### 2.5. [zabbix_agent_pb.yml](https://github.com/Stitchzxz/final_work/blob/main/ansible/zabbix_agent_pb.yml)
+### 2.5. [zabbix_agent_pb.yml](https://github.com/temagraf/final_work/blob/main/ansible/zabbix_agent_pb.yml)
   - добавляет репозиторий zabbix
   - устанавливает zabbix agent на все хосты
   - вносит корректировку в файл конфигурации  
@@ -146,14 +146,14 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![установка zabbix-agent](https://github.com/Stitchzxz/final_work/blob/main/img/install_zabbix_agent.png)
-![установка zabbix-agent](https://github.com/Stitchzxz/final_work/blob/main/img/enable_zabagent.png)
-![установка zabbix-agent](https://github.com/Stitchzxz/final_work/blob/main/img/dashboard_zabbix.png)
+![установка zabbix-agent](https://github.com/temagraf/final_work/blob/main/img/install_zabbix_agent.png)
+![установка zabbix-agent](https://github.com/temagraf/final_work/blob/main/img/enable_zabagent.png)
+![установка zabbix-agent](https://github.com/temagraf/final_work/blob/main/img/dashboard_zabbix.png)
 
 </details>
 
 
-### 2.6. [elasticsearch_pb.yml](https://github.com/Stitchzxz/final_work/blob/main/ansible/elasticsearch_pb.yml)
+### 2.6. [elasticsearch_pb.yml](https://github.com/temagraf/final_work/blob/main/ansible/elasticsearch_pb.yml)
   - скачивает и добавляет ключ gpg elasticsearch
   - добавляет репозиторий elasticsearch 8.x
   - устанавливает elasticsearch и зависимости
@@ -163,13 +163,13 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![установка elastic](https://github.com/Stitchzxz/final_work/blob/main/img/install_elastic.png)
-![установка elastic](https://github.com/Stitchzxz/final_work/blob/main/img/elastic_status.png)
-![установка elastic](https://github.com/Stitchzxz/final_work/blob/main/img/password_token.png)
+![установка elastic](https://github.com/temagraf/final_work/blob/main/img/install_elastic.png)
+![установка elastic](https://github.com/temagraf/final_work/blob/main/img/elastic_status.png)
+![установка elastic](https://github.com/temagraf/final_work/blob/main/img/password_token.png)
 
 </details>
 
-### 2.7. [kibana_pb.yml](https://github.com/Stitchzxz/final_work/blob/main/ansible/kibana_pb.yml)
+### 2.7. [kibana_pb.yml](https://github.com/temagraf/final_work/blob/main/ansible/kibana_pb.yml)
   - скачивает и добавляет ключ gpg elasticsearch
   - добавляет репозиторий elasticsearch 8.x
   - устанавливает kibana и зависимости
@@ -180,14 +180,14 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![установка kibana](https://github.com/Stitchzxz/final_work/blob/main/img/install_kibana.png)
-![статус kibana](https://github.com/Stitchzxz/final_work/blob/main/img/kibana_status.png)
-![подключение kibana](https://github.com/Stitchzxz/final_work/blob/main/img/check_code.png)
-![веб kibana](https://github.com/Stitchzxz/final_work/blob/main/img/kibana_web.png)
+![установка kibana](https://github.com/temagraf/final_work/blob/main/img/install_kibana.png)
+![статус kibana](https://github.com/temagraf/final_work/blob/main/img/kibana_status.png)
+![подключение kibana](https://github.com/temagraf/final_work/blob/main/img/check_code.png)
+![веб kibana](https://github.com/temagraf/final_work/blob/main/img/kibana_web.png)
 
 </details>
 
-### 2.8. [filebeat_pb.yml](https://github.com/Stitchzxz/final_work/blob/main/ansible/filebeat_pb.yml)
+### 2.8. [filebeat_pb.yml](https://github.com/temagraf/final_work/blob/main/ansible/filebeat_pb.yml)
   - скачивает и добавляет ключ gpg elasticsearch
   - добавляет репозиторий elasticsearch 8.x
   - устанавливает filebeat и зависимости
@@ -197,9 +197,9 @@
 <details>
 <summary> Скриншот(-ы) </summary>
 
-![установка filebeat](https://github.com/Stitchzxz/final_work/blob/main/img/install_filebeat.png)
-![установка filebeat](https://github.com/Stitchzxz/final_work/blob/main/img/filebeat_status.png)
-![установка filebeat](https://github.com/Stitchzxz/final_work/blob/main/img/filebeat_web.png)
+![установка filebeat](https://github.com/temagraf/final_work/blob/main/img/install_filebeat.png)
+![установка filebeat](https://github.com/temagraf/final_work/blob/main/img/filebeat_status.png)
+![установка filebeat](https://github.com/temagraf/final_work/blob/main/img/filebeat_web.png)
 
 </details>
 
