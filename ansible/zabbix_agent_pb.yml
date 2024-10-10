@@ -1,0 +1,41 @@
+---
+- name: install zabbix agent2
+  hosts: web_servers, log_servers
+  become: yes
+
+  tasks:
+  - name: download file repository zabbix repository
+    ansible.builtin.get_url:
+      url: "https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-4+ubuntu22.04_all.deb"
+      dest: /home/admin/
+
+
+  - name: install the zabbix repository
+    ansible.builtin.apt:
+      deb: /home/admin/zabbix-release_6.0-4+ubuntu22.04_all.deb
+    
+
+  - name: update cache repository
+    ansible.builtin.apt:
+      update_cache: yes
+
+
+  - name: install zabbix packages
+    ansible.builtin.apt:
+      name:
+        - zabbix-agent2
+        - zabbix-agent2-plugin-*
+      state: present  
+
+  - name: correct config file zabbix agent2 
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_agent2.conf
+      regexp: "^Server="
+      line: Server=192.168.3.33
+
+  - name: enable and restart zabbix-agent2
+    ansible.builtin.systemd:
+      name: zabbix-agent2
+      enabled: true
+      masked: no
+      state: restarted

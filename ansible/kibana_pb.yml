@@ -1,0 +1,67 @@
+---
+- name: install kibana
+  hosts: kibana
+  become: yes
+
+  tasks:
+
+# На момент сдачи работы ключ перестал скачиваться из-за блокировки. Решение ниже.
+
+  # - name: import the elastic apt key
+  #   ansible.builtin.apt_key:
+  #     url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  #     state: present
+
+# Скаченыный файл с ключом копируется на вм и добавляется.
+  - name: copy key file
+    copy:
+      src=/home/admin/ansible/gpg_key
+      dest=/home/admin/gpg_key
+
+  - name: add elastik apt key
+    ansible.builtin.apt_key:
+      file: /home/admin/gpg_key
+      state: present
+
+  - name: install elastic repository
+    ansible.builtin.apt_repository:
+      repo: deb https://mirror.yandex.ru/mirrors/elastic/8/ stable main
+      state: present
+
+  - name: update cache repository
+    ansible.builtin.apt:
+      update_cache: yes
+
+  - name: install packages
+    ansible.builtin.apt:
+      name:
+        - apt-transport-https
+        - openjdk-8-jre-headless
+        - kibana
+      state: present
+      
+  - name: setting kibana
+    ansible.builtin.lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: '^#server.host: "localhost"'
+      line: "server.host: 0.0.0.0"
+
+  - name: enable and restart kibana
+    ansible.builtin.systemd:
+      name: kibana
+      enabled: true
+      daemon_reload: true
+      masked: no
+      state: started
+
+  - name: connect kibana <-> elastic
+    ansible.builtin.pause:
+      prompt: "Open kibana web and insert token."
+
+  - name: save veryfication code
+    ansible.builtin.shell: /usr/share/kibana/bin/kibana-verification-code
+    register: ctlcode_result
+
+  - name: Debug registered var
+    debug: var=ctlcode_result.stdout_lines
+...

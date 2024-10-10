@@ -1,0 +1,100 @@
+---
+- name: install sabbix server
+  hosts: zabbix
+  become: true
+  
+  vars:
+    - password: Zabbix
+
+  tasks:
+  - name: download file repository zabbix repository
+    ansible.builtin.get_url:
+      url: "https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-4+ubuntu22.04_all.deb"
+      dest: /home/admin/
+
+
+  - name: install the zabbix repository
+    ansible.builtin.apt:
+      deb: /home/admin/zabbix-release_6.0-4+ubuntu22.04_all.deb
+    
+
+  - name: update cache repository
+    ansible.builtin.apt:
+      update_cache: yes
+
+
+  - name: install zabbix packages
+    ansible.builtin.apt:
+      name:
+        - zabbix-server-mysql
+        - zabbix-frontend-php
+        - zabbix-nginx-conf
+        - zabbix-sql-scripts
+        - zabbix-agent
+      state: present  
+
+  - name: Install Mysql
+    ansible.builtin.apt:
+      name:
+        - mysql-server
+        - python3-mysqldb
+      state: present
+
+  - name: enable and restart mysql
+    ansible.builtin.systemd:
+      name: mysql
+      enabled: true
+      masked: no
+      state: restarted
+
+  - name: create mysql database
+    community.mysql.mysql_db:
+      name: zabbix
+      encoding: utf8mb4
+      collation: utf8mb4_bin
+      state: present
+
+  - name: add user in mysql
+    community.mysql.mysql_user:
+      name: zabbix
+      password: "{{password}}"
+      priv: "*.*:ALL,GRANT"
+      state: present
+
+  - name: unpack
+    ansible.builtin.shell:
+      cmd: gunzip /usr/share/zabbix-sql-scripts/mysql/server.sql.gz
+
+
+  - name: import
+    community.mysql.mysql_db:
+      name: zabbix
+      state: import
+      target: /usr/share/zabbix-sql-scripts/mysql/server.sql
+
+
+  - name: setting zabbix db
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_server.conf
+      insertafter: "DBPassword="
+      line: DBPassword={{password}}
+
+  - name: setting port
+    shell: sed -i 's/#        listen          8080;/        listen          8080;/g' /etc/zabbix/nginx.conf
+
+  - name: setting address
+    shell: sed -i 's/#        server_name     example.com;;/        server_name     zabbix.example.com;/g' /etc/zabbix/nginx.conf
+
+  - name: enable and restart zabbix
+    ansible.builtin.systemd:
+      name: zabbix-server
+      enabled: true
+      masked: no
+      state: restarted
+
+  - name: enable and restart nginx
+    ansible.builtin.systemd:
+      name: nginx
+      enabled: true
+      masked: no
+      state: restarted
