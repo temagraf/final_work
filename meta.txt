@@ -1,8 +1,8 @@
 #cloud-config
 users:
-  - name: admin
+  - name: temagraf
     groups: sudo
     shell: /bin/bash
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    ssh-authorized-keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCXUjw1cvT2AhOlSBq0DpzS3tYQy3+FStU+6yEeMLbVGGDFsWynjQWmkiAhKt98mf43+RRUVh8lqQEuq2O0LnLn6bf2TCSrzREp/8gYxovjiSUq9J3Sn3PKkL/PDVAibwE/IjwqKJ2z0UnlsVV2t22Zsr2MnYgerZ8oc+ZuHAHYGKr8ldPMPJMCh7NMS3pthvMTx3qnbe2JDiqcgPUJDqMsU5siEWTaaQJyYqXIhnpelvVlyfo0ASe1U2C+Sc5MT+eOZ8CgH3JJT8K6XGOWYEC1QmGCEL01WZEjqe60CMBAMdc7xt+kUlXlV1KgS/InUpJFWA44fSxGqAmXmyu6NRYRy/KIVjiVnT7rQ8vK+vXD1hQb9zHKDx0b6m8piBI9juWepl/TmkuNLzdnG7V1SIk/9L6a667+n8mBaNUbAChNiX0YSLVUQIIVCKyaJ49NO5v/Q6fKqT2crlyEe5B340+loluxtG3rBpH61B/RH1Hltszn23y0wxZpHrtiS9tvzg0= nikolay@debian12
+    sudo: 'ALL=(ALL) NOPASSWD:ALL'
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC9UUQdtWiVXEcLjRRdT1kygfoDaVwgVtAQI9fkos5+GZIl/dKvq4HUXxjhond8xqkd+Mbn5PmmJq/iPrafj2ysyhQLiLxWRi2WjAvwU7IXQreNRaQ9g1MvOWVg66xF7lkXWBwjD9y24GVaGWlh/7ypUyQ2BXRCvcJOZaIAVxHQhuDYuDRrqDOPVtNjj219wPZAGIe8WbZvCyFR/9ca/dcGVDtPDXvIHOMnaa9+c7/E8Bhi1gefeqnvx+VjZU9RCspM2Cmrz//hVWXV3O2fR8WsQrzJkP8tpOK5eA3LeoMP7RD1gy2TvvF9F9SP+VczOiq2uRWKR9sfcnw9bAZI4ic9y1W0WZNV4f/L0QD1cv+mB5Ls2DjP+pOW4A6HnqJYC8Z18XrpSAs44foFDVxRqDkQz1Bpx+rHwpm47ezSATegtJmckY8nzP/cA/ktKvXBRqxts9gNZ+cDOx09+jVhCfgZnIzZ1wLGxYMpIEKS8uIiPhnNIcDdwao68sZiyq6PJrU= temagraf@temagraf-virtual-machine
