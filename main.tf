@@ -4,12 +4,22 @@ terraform {
       source = "yandex-cloud/yandex"
     }
   }
+  required_version = ">= 0.13"
+}
+
+
+
+locals {
+    folder_id = "b1gorsn2ilbffvgsij5n"
+    cloud_id = "b1gq7618ge7e6hm9291v"
+    service_account_key_file = "./key.json"
+
 }
 
 provider "yandex" {
-  service_account_key_file = var.key_id
-  cloud_id  = var.cloud_id
-  folder_id = var.folder_id
+    cloud_id = local.cloud_id
+    folder_id = local.folder_id
+    service_account_key_file = local.service_account_key_file
 }
 
 
@@ -32,7 +42,7 @@ resource "yandex_compute_instance" "vm-1" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd8s4a9mnca2bmgol2r8"
+      image_id = "fd8hglaneh113l00tv83"
     }
   }
 
@@ -43,7 +53,7 @@ resource "yandex_compute_instance" "vm-1" {
     security_group_ids = [yandex_vpc_security_group.nginx-sg.id]
   }
 
-  
+
   metadata = {
     user-data = "${file("./meta.txt")}"
   }
@@ -68,7 +78,7 @@ resource "yandex_compute_instance" "vm-2" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd8s4a9mnca2bmgol2r8"
+      image_id = "fd8hglaneh113l00tv83"
     }
   }
 
@@ -79,7 +89,7 @@ resource "yandex_compute_instance" "vm-2" {
     security_group_ids = [yandex_vpc_security_group.nginx-sg.id]
   }
 
-  
+
   metadata = {
     user-data = "${file("./meta.txt")}"
   }
@@ -89,7 +99,7 @@ resource "yandex_compute_instance" "vm-2" {
 resource "yandex_compute_instance" "vm-3" {
   name = "zabbix"
   platform_id = "standard-v3"
-  zone = "ru-central1-c"
+  zone = "ru-central1-d"
   hostname = "zabbix"
 
   resources {
@@ -104,7 +114,7 @@ resource "yandex_compute_instance" "vm-3" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd8s4a9mnca2bmgol2r8"
+      image_id = "fd8hglaneh113l00tv83"
     }
   }
 
@@ -115,7 +125,7 @@ resource "yandex_compute_instance" "vm-3" {
     security_group_ids = [yandex_vpc_security_group.zabbix-sg.id]
   }
 
-  
+
   metadata = {
     user-data = "${file("./meta.txt")}"
   }
@@ -140,7 +150,7 @@ resource "yandex_compute_instance" "vm-4" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd8s4a9mnca2bmgol2r8"
+      image_id = "fd8hglaneh113l00tv83"
       size = 10
     }
   }
@@ -152,7 +162,7 @@ resource "yandex_compute_instance" "vm-4" {
     security_group_ids = [yandex_vpc_security_group.elastic-sg.id]
   }
 
-  
+
   metadata = {
     user-data = "${file("./meta.txt")}"
   }
@@ -162,7 +172,7 @@ resource "yandex_compute_instance" "vm-4" {
 resource "yandex_compute_instance" "vm-5" {
   name = "kibana"
   platform_id = "standard-v3"
-  zone = "ru-central1-c"
+  zone = "ru-central1-d"
   hostname = "kibana"
 
   resources {
@@ -177,7 +187,7 @@ resource "yandex_compute_instance" "vm-5" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd8s4a9mnca2bmgol2r8"
+      image_id = "fd8hglaneh113l00tv83"
     }
   }
 
@@ -188,7 +198,7 @@ resource "yandex_compute_instance" "vm-5" {
     security_group_ids = [yandex_vpc_security_group.kibana-sg.id]
   }
 
-  
+
   metadata = {
     user-data = "${file("./meta.txt")}"
   }
@@ -198,7 +208,7 @@ resource "yandex_compute_instance" "vm-5" {
 resource "yandex_compute_instance" "vm-6" {
   name = "bastion"
   platform_id = "standard-v3"
-  zone = "ru-central1-c"
+  zone = "ru-central1-d"
   hostname = "bastion"
 
   resources {
@@ -213,7 +223,7 @@ resource "yandex_compute_instance" "vm-6" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd855o9p0a32dtp1uf17"
+      image_id = "fd8hglaneh113l00tv83"
     }
   }
 
@@ -224,7 +234,7 @@ resource "yandex_compute_instance" "vm-6" {
     security_group_ids = [yandex_vpc_security_group.bastion-sg.id]
   }
 
-  
+
   metadata = {
     user-data = "${file("./meta.txt")}"
   }
@@ -256,15 +266,15 @@ resource "yandex_alb_backend_group" "nginx-backend-group" {
     weight = 1
     port = 80
     target_group_ids = [yandex_alb_target_group.ngx-target-group.id]
-    
+
     load_balancing_config {
       panic_threshold = 0
-    }    
+    }
     healthcheck {
       timeout = "1s"
       interval = "3s"
       healthy_threshold    = 2
-      unhealthy_threshold  = 2 
+      unhealthy_threshold  = 2
       healthcheck_port     = 80
       http_healthcheck {
         path  = "/"
@@ -290,7 +300,7 @@ resource "yandex_alb_virtual_host" "ngx-virtual-host" {
       }
     }
   }
-}    
+}
 
 //________________________Балансер_____________________________________________
 resource "yandex_alb_load_balancer" "nginx-balancer" {
@@ -300,19 +310,19 @@ name        = "nginx-balancer"
   allocation_policy {
     location {
       zone_id   = "ru-central1-a"
-      subnet_id = yandex_vpc_subnet.subnet-1.id 
+      subnet_id = yandex_vpc_subnet.subnet-1.id
     }
     location {
       zone_id   = "ru-central1-b"
-      subnet_id = yandex_vpc_subnet.subnet-2.id 
+      subnet_id = yandex_vpc_subnet.subnet-2.id
     }
-    location {
-      zone_id   = "ru-central1-c"
-      subnet_id = yandex_vpc_subnet.subnet-3.id 
-    }
+   # location {
+   #   zone_id   = "ru-central1-d"
+   #   subnet_id = yandex_vpc_subnet.subnet-3.id
+   # }
     location {
       zone_id   = "ru-central1-d"
-      subnet_id = yandex_vpc_subnet.subnet-4.id 
+      subnet_id = yandex_vpc_subnet.subnet-4.id
     }
   }
 
@@ -324,14 +334,14 @@ name        = "nginx-balancer"
         }
       }
       ports = [ 80 ]
-    }    
+    }
     http {
       handler {
         http_router_id = yandex_alb_http_router.nginx-router.id
       }
     }
   }
-}  
+}
 
 
 
@@ -341,7 +351,7 @@ name        = "nginx-balancer"
 resource "yandex_vpc_security_group" "bastion-sg" {
   name        = "bastion-sg"
   description = "access via ssh"
-  network_id  = "${yandex_vpc_network.network-1.id}"  
+  network_id  = "${yandex_vpc_network.network-1.id}"
   ingress {
       protocol          = "TCP"
       description       = "ssh-in"
@@ -364,7 +374,7 @@ resource "yandex_vpc_security_group" "bastion-sg" {
 resource "yandex_vpc_security_group" "nginx-sg" {
   name        = "nginx-sg"
   description = "rules for nginx"
-  network_id  = "${yandex_vpc_network.network-1.id}"  
+  network_id  = "${yandex_vpc_network.network-1.id}"
 
   ingress {
     protocol       = "TCP"
@@ -377,20 +387,20 @@ resource "yandex_vpc_security_group" "nginx-sg" {
     protocol       = "TCP"
     description    = "ssh in"
     port           = "22"
-    v4_cidr_blocks = ["192.168.33.0/24"] 
+    v4_cidr_blocks = ["192.168.33.0/24"]
   }
 
   ingress {
     protocol       = "TCP"
     description    = "zabbix in"
     port           = "10050"
-    v4_cidr_blocks = ["192.168.3.0/24"] 
+    v4_cidr_blocks = ["192.168.3.0/24"]
   }
 
   ingress {
     description = "Health checks from NLB"
     protocol = "TCP"
-    predefined_target = "loadbalancer_healthchecks" 
+    predefined_target = "loadbalancer_healthchecks"
   }
 
 
@@ -399,7 +409,7 @@ resource "yandex_vpc_security_group" "nginx-sg" {
     protocol       = "ANY"
     from_port         = 0
     to_port           = 65535
-    v4_cidr_blocks = ["0.0.0.0/0"] 
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -407,7 +417,7 @@ resource "yandex_vpc_security_group" "nginx-sg" {
 resource "yandex_vpc_security_group" "zabbix-sg" {
   name        = "zabbix-sg"
   description = "rules for zabbix"
-  network_id  = "${yandex_vpc_network.network-1.id}"  
+  network_id  = "${yandex_vpc_network.network-1.id}"
 
   ingress {
     protocol       = "TCP"
@@ -420,14 +430,14 @@ resource "yandex_vpc_security_group" "zabbix-sg" {
     protocol       = "TCP"
     description    = "ssh in"
     port           = "22"
-    v4_cidr_blocks = ["192.168.33.0/24"] 
+    v4_cidr_blocks = ["192.168.33.0/24"]
   }
 
   ingress {
     protocol       = "TCP"
     description    = "zabbix in"
     port           = "10051"
-    v4_cidr_blocks = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24", "192.168.4.0/24"] 
+    v4_cidr_blocks = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24", "192.168.4.0/24"]
   }
 
   egress {
@@ -435,7 +445,7 @@ resource "yandex_vpc_security_group" "zabbix-sg" {
     protocol       = "ANY"
     from_port         = 0
     to_port           = 65535
-    v4_cidr_blocks = ["0.0.0.0/0"] 
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -443,28 +453,28 @@ resource "yandex_vpc_security_group" "zabbix-sg" {
 resource "yandex_vpc_security_group" "elastic-sg" {
   name        = "elastic-sg"
   description = "rules for elastic"
-  network_id  = "${yandex_vpc_network.network-1.id}"  
+  network_id  = "${yandex_vpc_network.network-1.id}"
 
 
   ingress {
     protocol       = "TCP"
     description    = "ssh in"
     port           = "22"
-    v4_cidr_blocks = ["192.168.33.0/24"] 
+    v4_cidr_blocks = ["192.168.33.0/24"]
   }
 
   ingress {
     protocol       = "TCP"
     description    = "zabbix in"
     port           = "10050"
-    v4_cidr_blocks = ["192.168.3.0/24"] 
+    v4_cidr_blocks = ["192.168.3.0/24"]
   }
 
   ingress {
     protocol       = "TCP"
     description    = "elastic agent in"
     port           = "9200"
-    v4_cidr_blocks = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24"] 
+    v4_cidr_blocks = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24"]
   }
 
   egress {
@@ -472,7 +482,7 @@ resource "yandex_vpc_security_group" "elastic-sg" {
     protocol       = "ANY"
     from_port         = 0
     to_port           = 65535
-    v4_cidr_blocks = ["0.0.0.0/0"] 
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -480,7 +490,7 @@ resource "yandex_vpc_security_group" "elastic-sg" {
 resource "yandex_vpc_security_group" "kibana-sg" {
   name        = "kibana-sg"
   description = "rules for kibana"
-  network_id  = "${yandex_vpc_network.network-1.id}"  
+  network_id  = "${yandex_vpc_network.network-1.id}"
 
   ingress {
     protocol       = "TCP"
@@ -493,14 +503,14 @@ resource "yandex_vpc_security_group" "kibana-sg" {
     protocol       = "TCP"
     description    = "ssh in"
     port           = "22"
-    v4_cidr_blocks = ["192.168.33.0/24"] 
+    v4_cidr_blocks = ["192.168.33.0/24"]
   }
 
   ingress {
     protocol       = "TCP"
     description    = "zabbix in"
     port           = "10050"
-    v4_cidr_blocks = ["192.168.3.0/24"] 
+    v4_cidr_blocks = ["192.168.3.0/24"]
   }
 
   egress {
@@ -508,7 +518,7 @@ resource "yandex_vpc_security_group" "kibana-sg" {
     protocol       = "ANY"
     from_port         = 0
     to_port           = 65535
-    v4_cidr_blocks = ["0.0.0.0/0"] 
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -574,7 +584,7 @@ resource "yandex_vpc_subnet" "subnet-2" {
 //_________________________ПОДСЕТЬ-3____________________________________
 resource "yandex_vpc_subnet" "subnet-3" {
   name           = "subnet3"
-  zone           = "ru-central1-c"
+  zone           = "ru-central1-d"
   network_id     = yandex_vpc_network.network-1.id
   v4_cidr_blocks = ["192.168.3.0/24", "192.168.33.0/24"]
 }
@@ -587,11 +597,6 @@ resource "yandex_vpc_subnet" "subnet-4" {
   v4_cidr_blocks = ["192.168.4.0/24"]
   route_table_id = yandex_vpc_route_table.nginx1-2_elastic.id
 }
-
-
-
-
-
 //_____вывод IP адреса бастиона_____________________________
 output "external_ip_address_vm_6_BASTION" {
   value = yandex_compute_instance.vm-6.network_interface.0.nat_ip_address
